@@ -1,34 +1,146 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <title></title>
-  <link rel="stylesheet" href="../../assets/default.css" />
-</head>
-<body>
+  <head>
 
-  <div id="main">
-    <div id="header"></div>
-    <div id="content"></div>
-  </div>
-  
-  <script type="text/template" id="header-template">
-    <div id="notification" ></div>
-    <div id="errors" class="error"></div>
-    <form>
-      <input id="name" class="input-large" type="text" placeholder="Name" />
-      <input id="email" class="input-large" type="text" placeholder="Email"/>
-      <button class="input-btn">Add</button>
-    </form>
-  </script>
-  
-  <script type="text/template" id="contact-template">
-    <li class="list-item">
-    <span class="left"><%= name %></span>
-    <span class="right"><strong><%= email %></strong> - 
-    [<a data-action="delete" href="#">x</a>]</span>
-    </li>
-  </script>
+    <meta charset="utf-8">
+    <title>Example Contacts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script data-main="js/main" src="../../assets/require.min.js"></script>
-</body>
+    <link href="../../_assets/css/bootstrap.css" rel="stylesheet">
+    <link href="../../_assets/css/bootstrap-theme.css" rel="stylesheet">
+    <!-- <link href="../../_assets/bootstrap&#45;responsive.min.css" rel="stylesheet"> -->
+
+    <style>
+      body {
+        position: relative;
+      }
+      .list-item {
+        padding: 6px;
+        margin: 6px 0 6px;
+        outline: none;
+
+      }
+      #list-container {
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div id="app">
+      <div class="navbar navbar-default">
+        <a class="navbar-brand">Contacts <span class="badge" id="count">0</span></a>
+
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Filter" id="q">
+          </div>
+        </form>
+
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a data-action="add" href="#contact">Add a contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+        <div id="notifications"></div>
+        <div class="row">
+          <div class="span12" id="views"></div>
+        </div>
+      </div>
+    </div>
+
+    <script id="tpl-contact-edit" type="text/template">
+      <form class="form-horizontal">
+
+        <div class="form-group">
+          <div class="col-xs-2">
+            <input class="form-control" type="text" name="firstname" value="<%= firstName %>" placeholder="First name">
+          </div>
+
+          <div class="col-xs-2">
+            <input class="form-control" type="text" name="lastname" value="<%= lastName %>" placeholder="Last name">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-xs-4">
+            <input class="form-control" name="email" type="email" value="<%= email %>" placeholder="Email">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <a href="#">Cancel</a>
+            <button class="btn btn-success">Save</button>
+          </div>
+        </div>
+      </form>
+    </script>
+
+    <script id="tpl-contact-form" type="text/template">
+      <form class="form-horizontal well">
+        <legend>New contact</legend>
+        <div class="form-group">
+          <label class="control-label col-xs-2" for="firstName">First name</label>
+          <div class="col-xs-2">
+            <input class="form-control" type="text" name="firstname" id="firstName" value="<%= firstName %>" placeholder="First name">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-2" for="lastName">Last name</label>
+          <div class="col-xs-2">
+            <input class="form-control" type="text" name="lastname" id="lastName" value="<%= lastName %>" placeholder="Last name">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-2" for="email">Email</label>
+          <div class="col-xs-2">
+            <input class="form-control" type="text" name="email" id="email" value="<%= email %>" placeholder="Email">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <a href="#" data-action="cancel">Cancel</a>
+            <button class="btn btn-success">Save</button>
+          </div>
+        </div>
+      </form>
+    </script>
+
+
+    <script id="tpl-contact-view" type="text/template">
+      <address>
+        <b><%= firstName + ' ' + lastName %></b><br>
+        <p class="text-info pull-left">
+          <i class="glyphicon glyphicon-envelope"></i>
+          <%= email %>
+        </p>
+        <div class="pull-right">
+          <a class="btn btn-default" href="#edit/<%= id %>">Edit</a>
+          <button class="btn btn-warning" data-action="delete">Delete</button>
+        </div>
+        <p>&nbsp;</p>
+      </address>
+    </script>
+
+
+    <script src="../../_assets/jquery.js"></script>
+    <script src="../../_assets/underscore.js"></script>
+    <script src="../../_assets/backbone.js"></script>
+    <script src="../../_assets/backbone.localStorage.js"></script>
+    <script src="js/models.js"></script>
+    <script src="js/views.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/app.js"></script>
+
+  </body>
 </html>

@@ -7,7 +7,7 @@ $(function () {
   var view = new app.AppView();
 
   if (window.location.hash) {
-    view.onRouteChanged(window.location.hash.replace(/#/, ''));
+    app.Router.handleRoute(window.location.hash);
   }
 });
 

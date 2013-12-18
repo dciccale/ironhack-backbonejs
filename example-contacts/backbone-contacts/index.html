@@ -32,7 +32,7 @@
       <div class="navbar navbar-default">
         <a class="navbar-brand">Contacts <span class="badge" id="count">0</span></a>
 
-        <form class="navbar-form navbar-left" role="search">
+        <form class="navbar-form navbar-left" role="search" id="searchForm">
           <div class="form-group">
             <input type="text" class="form-control" placeholder="Filter" id="q">
           </div>
@@ -56,15 +56,30 @@
     </div>
 
     <script id="tpl-contact-edit" type="text/template">
-      <form class="form-inline">
-        <input class="form-control" type="text" name="firstname" value="<%= firstName %>" placeholder="First name">
-        <input class="form-control" type="text" name="lastname" value="<%= lastName %>" placeholder="Last name">
-        <input name="email" type="email" value="<%= email %>" placeholder="Email">
+      <form class="form-horizontal">
 
-        <span class="pull-right">
-          <button class="btn btn-default">Save</button>
-          <button class="btn" data-action="cancel">Cancel</button>
-        </span>
+        <div class="form-group">
+          <div class="col-xs-2">
+            <input class="form-control" type="text" name="firstname" value="<%= firstName %>" placeholder="First name">
+          </div>
+
+          <div class="col-xs-2">
+            <input class="form-control" type="text" name="lastname" value="<%= lastName %>" placeholder="Last name">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-xs-4">
+            <input class="form-control" name="email" type="email" value="<%= email %>" placeholder="Email">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <a href="#">Cancel</a>
+            <button class="btn btn-success">Save</button>
+          </div>
+        </div>
       </form>
     </script>
 
@@ -94,7 +109,7 @@
 
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-default" data-action="cancel">Cancel</button>
+            <a href="#" data-action="cancel">Cancel</a>
             <button class="btn btn-success">Save</button>
           </div>
         </div>
@@ -109,8 +124,8 @@
           <i class="glyphicon glyphicon-envelope"></i>
           <%= email %>
         </p>
-        <div class="btn-group pull-right">
-          <button class="btn btn-default" data-action="edit">Edit</button>
+        <div class="pull-right">
+          <a class="btn btn-default" href="#edit/<%= id %>">Edit</a>
           <button class="btn btn-warning" data-action="delete">Delete</button>
         </div>
         <p>&nbsp;</p>

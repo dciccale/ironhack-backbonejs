@@ -168,8 +168,7 @@ $(function () {
     el: '#app',
 
     events: {
-      'keyup #q': 'onKeyUp',
-      'submit #searchForm': 'onSubmitSearchForm'
+      'keyup #q': 'searchContact'
     },
 
     initialize: function () {
@@ -193,25 +192,14 @@ $(function () {
       app.Contacts.fetch({reset: true});
     },
 
-    onSubmitSearchForm: function (ev) {
-      ev.preventDefault();
+    searchContact: function (ev) {
 
-      var q = $(ev.currentTarget).find('#q').val();
-
-      app.Router.navigate('#search/' + q);
-    },
-
-    onKeyUp: function (ev) {
       // No contacts to filter
       if (!app.Contacts.length) {
         return;
       }
 
       var q = ev.currentTarget.value.toLowerCase();
-      this.searchContact(q);
-    },
-
-    searchContact: function (q) {
       var that = this;
 
       var res = app.Contacts.filter(function (contact) {
@@ -305,8 +293,6 @@ $(function () {
         this.addContactForm();
       } else if (route === 'edit') {
         this.editContact(args);
-      } else if (route === 'search') {
-        this.searchContact(args);
       } else {
         this.addAll();
         if (this.contactForm) {

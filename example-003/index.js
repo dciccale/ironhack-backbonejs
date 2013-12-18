@@ -8,6 +8,9 @@
     last: 'Ciccale'
   };
 
+  // Model
+  // -----
+
   // Define a user model
   var UserModel = Backbone.Model.extend({
     defaults: user_data,
@@ -23,8 +26,21 @@
   // Make the user say hi!
   // user.sayHi();
 
+  // Listen for changes
+  // user.listenTo(user, 'change:name', user.sayHi);
+
+  // View
+  // -----
+
+
+  // Define a user model
+  var UserView = Backbone.View.extend({
+    template: _.template($('#user-tpl'))
+  });
+
   window.App = {
-    UserModel: UserModel
+    UserModel: UserModel,
+    UserView: UserView
   };
 
 }());
