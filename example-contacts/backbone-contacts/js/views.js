@@ -168,6 +168,7 @@ $(function () {
     el: '#app',
 
     events: {
+      'click #clear': 'clearSearch',
       'keyup #q': 'onKeyUp',
       'submit #searchForm': 'onSubmitSearchForm'
     },
@@ -184,35 +185,70 @@ $(function () {
       this.listenTo(app.Contacts, 'reset', this.addAll);
       this.listenTo(app.Contacts, 'all', this.render);
 
-
       this.listenTo(app.PubSub, 'add:success', this.onAddSuccess);
       this.listenTo(app.PubSub, 'edit:success', this.onEditSuccess);
       this.listenTo(app.PubSub, 'delete:success', this.onDeleteSuccess);
+
+      // Handle route change
       this.listenTo(app.PubSub, 'route:changed', this.onRouteChanged);
 
       app.Contacts.fetch({reset: true});
     },
 
     onSubmitSearchForm: function (ev) {
+      var q;
+
       ev.preventDefault();
 
-      var q = $(ev.currentTarget).find('#q').val();
+      q = $(ev.currentTarget).find('#q').val().toLowerCase();
+
+      if (!q) {
+        return;
+      }
+
+      q = q.replace(' ', '+');
 
       app.Router.navigate('#search/' + q);
     },
 
+    clearSearch: function (ev) {
+      $(ev.currentTarget).hide();
+      $('#q').val('');
+      app.Router.navigate('');
+      this.addAll();
+    },
+
     onKeyUp: function (ev) {
-      // No contacts to filter
-      if (!app.Contacts.length) {
+      var q;
+
+      q = ev.currentTarget.value.toLowerCase();
+
+      if (!q) {
+        $('#clear').hide();
+        this.addAll();
         return;
       }
 
-      var q = ev.currentTarget.value.toLowerCase();
       this.searchContact(q);
     },
 
     searchContact: function (q) {
       var that = this;
+
+      if (!q) {
+        app.Router.navigate('');
+        return;
+      }
+
+      // No contacts to filter
+      if (!app.Contacts.length) {
+        return;
+      }
+
+      q = q.replace('+', ' ');
+
+      $('#q').val(q);
+      $('#clear').show();
 
       var res = app.Contacts.filter(function (contact) {
         var fullName = contact.get('firstName') + ' ' + contact.get('lastName');
@@ -251,6 +287,12 @@ $(function () {
 
     editContact: function (id) {
       id = parseInt(id, 10);
+
+      this.contactList.views.filter(function(view) {
+        if (view.template === view.templates['edit']) {
+          view.toggleMode();
+        }
+      });
 
       var contactToEdit = this.contactList.views.filter(function(view) {
         return view.model.get('id') === id;
@@ -309,6 +351,7 @@ $(function () {
         this.searchContact(args);
       } else {
         this.addAll();
+        $('#q').val('');
         if (this.contactForm) {
           this.contactForm.remove();
           this.contactForm = null;

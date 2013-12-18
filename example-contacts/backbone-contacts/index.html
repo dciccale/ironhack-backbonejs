@@ -30,13 +30,18 @@
 
     <div id="app">
       <div class="navbar navbar-default">
-        <a class="navbar-brand">Contacts <span class="badge" id="count">0</span></a>
+        <a class="navbar-brand" href="#">Contacts <span class="badge" id="count">0</span></a>
 
-        <form class="navbar-form navbar-left" role="search" id="searchForm">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Filter" id="q">
-          </div>
-        </form>
+        <div class="col-sm-3 col-md-3 pull-left">
+          <form class="navbar-form navbar-left" role="search" id="searchForm">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Filter" id="q">
+              <div class="input-group-btn">
+                <a class="btn btn-default" id="clear" style="display:none"><i class="glyphicon glyphicon-remove"></i></a>
+              </div>
+            </div>
+          </form>
+        </div>
 
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
