@@ -19,6 +19,7 @@ var app = app || {};
     }
   });
 
+  // Init Router
   app.Router = new Router();
   Backbone.history.start();
 

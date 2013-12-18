@@ -1,12 +1,18 @@
-var app = app || {};
-
-$(function () {
-
-  var _guid = 1;
+define([
+  'jquery',
+  'underscore',
+  'backbone',
+  'models',
+  'pubsub'
+], function ($, _, Backbone, Models, PubSub) {
 
   'use strict';
 
-  app.ContactFormView = Backbone.View.extend({
+  var Views = {};
+
+  var _guid = 1;
+
+  Views.ContactFormView = Backbone.View.extend({
     template: _.template($('#tpl-contact-form').html()),
 
     events: {
@@ -15,7 +21,7 @@ $(function () {
     },
 
     initialize: function () {
-      this.model = this.model || new app.Contact();
+      this.model = this.model || new Models.Contact();
     },
 
     render: function () {
@@ -50,9 +56,9 @@ $(function () {
         email: email
       });
 
-      it = app.Contacts.models.length;
+      it = Models.Contacts.models.length;
       while ((it = it - 1) >= 0) {
-        model = app.Contacts.models[it];
+        model = Models.Contacts.models[it];
 
         // Prevent adding same email
         if (model.get('email') === email) {
@@ -60,21 +66,21 @@ $(function () {
         }
       }
 
-      app.Contacts.add(this.model, { unique: true });
+      Models.Contacts.add(this.model, { unique: true });
       this.model.save({}, {
         error: function () {
-          app.PubSub.trigger('add:error', [].slice.call(arguments, 0));
+          PubSub.trigger('add:error', [].slice.call(arguments, 0));
         },
         success: function () {
           me.onCancel();
-          app.PubSub.trigger('add:success');
+          PubSub.trigger('add:success');
         }
       });
     }
   });
 
   // the view that displays and edits the contact
-  app.ContactListItemView = Backbone.View.extend({
+  Views.ContactListItemView = Backbone.View.extend({
     tagName: 'li',
 
     className: 'list-group-item',
@@ -110,7 +116,7 @@ $(function () {
 
     onDelete: function (e) {
       this.model.destroy();
-      app.PubSub.trigger('delete:success');
+      PubSub.trigger('delete:success');
     },
 
     onSubmit: function (e) {
@@ -132,7 +138,7 @@ $(function () {
           me.toggleMode();
         },
         success: function () {
-          app.PubSub.trigger('edit:success', me.model);
+          PubSub.trigger('edit:success', me.model);
           me.toggleMode();
         }
       });
@@ -140,7 +146,7 @@ $(function () {
   });
 
   // a view containing the list of contacts
-  app.ContactListView = Backbone.View.extend({
+  Views.ContactListView = Backbone.View.extend({
     tagName: 'ul',
 
     className: 'list-group',
@@ -164,7 +170,7 @@ $(function () {
 
 
   // main application view
-  app.AppView = Backbone.View.extend({
+  Views.AppView = Backbone.View.extend({
     el: '#app',
 
     events: {
@@ -178,21 +184,21 @@ $(function () {
       this.views = this.$('#views');
       this.count = this.$('#count');
 
-      this.contactList = new app.ContactListView();
+      this.contactList = new Views.ContactListView();
       this.views.append(this.contactList.render().el);
 
-      this.listenTo(app.Contacts, 'add', this.addOne);
-      this.listenTo(app.Contacts, 'reset', this.addAll);
-      this.listenTo(app.Contacts, 'all', this.render);
+      this.listenTo(Models.Contacts, 'add', this.addOne);
+      this.listenTo(Models.Contacts, 'reset', this.addAll);
+      this.listenTo(Models.Contacts, 'all', this.render);
 
-      this.listenTo(app.PubSub, 'add:success', this.onAddSuccess);
-      this.listenTo(app.PubSub, 'edit:success', this.onEditSuccess);
-      this.listenTo(app.PubSub, 'delete:success', this.onDeleteSuccess);
+      this.listenTo(PubSub, 'add:success', this.onAddSuccess);
+      this.listenTo(PubSub, 'edit:success', this.onEditSuccess);
+      this.listenTo(PubSub, 'delete:success', this.onDeleteSuccess);
 
       // Handle route change
-      this.listenTo(app.PubSub, 'route:changed', this.onRouteChanged);
+      this.listenTo(PubSub, 'route:changed', this.onRouteChanged);
 
-      app.Contacts.fetch({reset: true});
+      Models.Contacts.fetch({reset: true});
     },
 
     onSubmitSearchForm: function (ev) {
@@ -241,7 +247,7 @@ $(function () {
       }
 
       // No contacts to filter
-      if (!app.Contacts.length) {
+      if (!Models.Contacts.length) {
         return;
       }
 
@@ -250,7 +256,7 @@ $(function () {
       $('#q').val(q);
       $('#clear').show();
 
-      var res = app.Contacts.filter(function (contact) {
+      var res = Models.Contacts.filter(function (contact) {
         var fullName = contact.get('firstName') + ' ' + contact.get('lastName');
         fullName = fullName.toLowerCase();
 
@@ -277,7 +283,7 @@ $(function () {
     addContactForm: function () {
       var firstChild;
       if (!this.contactForm) {
-        this.contactForm = new app.ContactFormView({model: new app.Contact()});
+        this.contactForm = new Views.ContactFormView({model: new Models.Contact()});
         this.contactForm.listenTo(this.contactForm, 'remove', _.bind(function () {
           this.contactForm = null;
         }, this));
@@ -304,19 +310,18 @@ $(function () {
     },
 
     addOne: function (contact) {
-      var listItemView = new app.ContactListItemView({model: contact});
+      var listItemView = new Views.ContactListItemView({model: contact});
       this.contactList.addView(listItemView);
     },
 
     addAll: function (contacts) {
       this.contactList.removeAll();
-      // app.Contacts.sort();
-      app.Contacts.each(this.addOne, this);
+      Models.Contacts.each(this.addOne, this);
     },
 
     render: function () {
       // console.log('render', arguments);
-      this.count.text(app.Contacts.length);
+      this.count.text(Models.Contacts.length);
     },
 
     displayNotification: function (msg) {
@@ -360,4 +365,5 @@ $(function () {
     }
   });
 
+  return Views;
 });

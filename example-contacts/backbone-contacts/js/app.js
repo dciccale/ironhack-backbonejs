@@ -10,4 +10,3 @@ $(function () {
     app.Router.handleRoute(window.location.hash);
   }
 });
-
