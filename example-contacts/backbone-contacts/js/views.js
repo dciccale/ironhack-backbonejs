@@ -16,6 +16,7 @@ $(function () {
 
     initialize: function () {
       this.model = this.model || new app.Contact();
+      this.listenTo(this.model, 'invalid', this.onInvalid);
     },
 
     render: function () {
@@ -70,6 +71,10 @@ $(function () {
           app.PubSub.trigger('add:success');
         }
       });
+    },
+
+    onInvalid: function (model, error) {
+      alert(error);
     }
   });
 
