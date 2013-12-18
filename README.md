@@ -1,4 +1,3 @@
-ironhack-backbonejs
-===================
+# ironhack-backbonejs
 
-Backbone.js course at IronHack
+Backbone.js course at Ironhack
