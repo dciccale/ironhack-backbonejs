@@ -2,17 +2,23 @@
 
   'use strict';
 
+  var app = {};
+
   // Basic data structure
-  var user_data = {
+  var userData = {
     name: 'Denis',
     last: 'Ciccale'
   };
 
-  // Create a new backbone model
-  var user = new Backbone.Model(user_data);
+  // Create a new Backbone Model
+  var userModel = new Backbone.Model(userData);
 
-  window.App = {
-    user: user
-  };
+  var usersCollection = new Backbone.Collection([userModel]);
+
+  // Expose instances for demo
+  app.userModel = userModel;
+  app.usersCollection = usersCollection;
+
+  window.app = app;
 
 }());

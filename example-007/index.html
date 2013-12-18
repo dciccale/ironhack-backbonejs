@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>Example</title>
+
+    <style>
+    body {
+      margin: 0;
+    }
+    header, footer {
+      position: absolute;
+      width: 100%;
+      background-color: papayaWhip;
+      color: #000;
+      padding: 5px;
+    }
+    header {
+      top: 0;
+    }
+    footer {
+      bottom: 0;
+    }
+    </style>
+  </head>
+
+  <body>
+
+    <script id="view-tpl" type="text/template">
+      <p><%= text %></p>
+    </script>
+
+    <header></header>
+
+    <footer></footer>
+
+    <script src="../_assets/jquery.js"></script>
+    <script src="../_assets/underscore.js"></script>
+    <script src="../_assets/backbone.js"></script>
+
+    <script src="index.js"></script>
+
+  </body>
+
+</html>

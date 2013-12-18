@@ -2,32 +2,36 @@
 
   'use strict';
 
-  // Basic data structure
-  var user_data = {
-    name: 'Denis',
-    last: 'Ciccale'
+  var app = {
+    Models: {}
   };
 
   // Define a user model
   var UserModel = Backbone.Model.extend({
-    defaults: user_data,
-
-    sayHi: function () {
-      console.log('Hi, my name is', this.get('name'));
+    defaults: {
+      name: 'defaultName',
+      last: 'defaultLast'
     }
   });
 
-  // Create a new user
-  // var user = new UserModel(user_data);
+  // Create a new user model using defaults
+  var userModel1 = new UserModel();
+  console.log('userModel1', JSON.stringify(userModel1));
 
-  // Make the user say hi!
-  // user.sayHi();
+  // Create a new user model defining custom values
+  var userModel2 = new UserModel({
+    name: 'Denis',
+    last: 'Ciccale'
+  });
+  console.log('userModel2', JSON.stringify(userModel2));
 
-  // Listen for changes
-  // user.listenTo(user, 'change:name', user.sayHi);
+  // Expose constructors for demo
+  app.Models.UserModel = UserModel;
 
-  window.App = {
-    UserModel: UserModel
-  };
+  // Expose instances for demo
+  app.userModel1 = userModel1;
+  app.userModel2 = userModel2;
+
+  window.app = app;
 
 }());

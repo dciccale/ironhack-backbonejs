@@ -1,0 +1,5 @@
+# Models
+
+## Getters & Setters
+
+## toJSON()

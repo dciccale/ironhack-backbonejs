@@ -2,45 +2,50 @@
 
   'use strict';
 
-  // Basic data structure
-  var user_data = {
-    name: 'Denis',
-    last: 'Ciccale'
+  var app = {
+    Models: {}
   };
-
-  // Model
-  // -----
 
   // Define a user model
   var UserModel = Backbone.Model.extend({
-    defaults: user_data,
-
-    sayHi: function () {
-      console.log('Hi, my name is', this.get('name'));
+    defaults: {
+      name: '',
+      last: ''
     }
   });
 
-  // Create a new user
-  // var user = new UserModel(user_data);
-
-  // Make the user say hi!
-  // user.sayHi();
-
-  // Listen for changes
-  // user.listenTo(user, 'change:name', user.sayHi);
-
-  // View
-  // -----
-
-
-  // Define a user model
-  var UserView = Backbone.View.extend({
-    template: _.template($('#user-tpl'))
+  // Create a new user model defining custom values
+  var userModel1 = new UserModel({
+    name: 'Denis',
+    last: 'Ciccale'
   });
 
-  window.App = {
-    UserModel: UserModel,
-    UserView: UserView
-  };
+  // Get model attributes
+  console.log(userModel1.get('name')); // Denis
+  console.log(userModel1.get('last')); // Ciccale
+
+  // Set model attributes
+  userModel1.set('name', 'Eugenio');
+  console.log(userModel1.get('name')); // Eugenio
+
+  // Set map attributes
+  userModel1.set({
+    name: 'Peter',
+    last: 'Parker'
+  });
+  console.log(userModel1.get('name')); // Peter
+  console.log(userModel1.get('last')); // Parker
+
+  // Get a copy of the model attributes
+  var modelAttrs = userModel1.toJSON();
+  console.log(modelAttrs);
+
+  // Expose constructors for demo
+  app.Models.UserModel = UserModel;
+
+  // Expose instances for demo
+  app.userModel1 = userModel1;
+
+  window.app = app;
 
 }());
