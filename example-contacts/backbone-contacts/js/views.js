@@ -240,13 +240,8 @@ $(function () {
     searchContact: function (q) {
       var that = this;
 
-      if (!q) {
+      if (!q || !app.Contacts.length) {
         Backbone.history.navigate('');
-        return;
-      }
-
-      // No contacts to filter
-      if (!app.Contacts.length) {
         return;
       }
 

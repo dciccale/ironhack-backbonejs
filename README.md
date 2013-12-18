@@ -1,3 +1,3 @@
 # ironhack-backbonejs
 
-Backbone.js course at Ironhack
+Backbone.js at Ironhack
